@@ -15,6 +15,7 @@ $RECYCLE.BIN/
 *.iws
 *.ipr
 .vscode/
+.claude/
 *.swp
 *.swo
 *~
