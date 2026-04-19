@@ -12,6 +12,9 @@ Alle Commands aus dem `frontend/`-Verzeichnis:
 - Watch-Build: `npm run watch`
 - Tests (Watch-Mode): `npm test` (Vitest)
 - Tests (Single-Run): `npx vitest run`
+- Lint: `npm run lint` (ESLint via `ng lint`, flat config in `eslint.config.js`)
+- Format schreiben: `npm run format` (Prettier über alle Dateien)
+- Format prüfen: `npm run format:check` (CI-Check)
 
 ## Tech-Stack
 
