@@ -1,0 +1,28 @@
+{
+  "app": {
+    "title": "Workout AWS"
+  },
+  "equipment": {
+    "title": "Equipment",
+    "toolbar": {
+      "columnToggler": "Spalten",
+      "selectedItemsLabel": "{0} Spalten",
+      "search": "Globale Suche"
+    },
+    "columns": {
+      "id": "ID",
+      "name": "Name",
+      "category": "Kategorie"
+    },
+    "categories": {
+      "mobility": "Mobility",
+      "dumbbell": "Hantel",
+      "cardio": "Cardio",
+      "cable": "Kabelzug",
+      "machine": "Maschine",
+      "bodyweight": "Eigengewicht",
+      "other": "Sonstiges"
+    },
+    "emptyMessage": "Keine Einträge gefunden."
+  }
+}
