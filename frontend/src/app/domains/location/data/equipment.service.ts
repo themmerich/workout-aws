@@ -1,12 +1,16 @@
-import { Injectable, Signal, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable, Signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Equipment } from '../model/equipment.model';
-import { MOCK_EQUIPMENTS } from './equipment.mock';
 
 @Injectable({ providedIn: 'root' })
 export class EquipmentService {
-  private readonly _equipments = signal<Equipment[]>(MOCK_EQUIPMENTS);
+  private readonly http = inject(HttpClient);
+  private readonly equipments = toSignal(this.http.get<Equipment[]>('/api/equipment'), {
+    initialValue: [] as Equipment[],
+  });
 
   getAll(): Signal<Equipment[]> {
-    return this._equipments.asReadonly();
+    return this.equipments;
   }
 }

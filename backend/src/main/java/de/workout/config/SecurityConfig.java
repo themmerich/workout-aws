@@ -1,4 +1,4 @@
-package de.workout.backend.config;
+package de.workout.config;
 
 import java.util.List;
 
