@@ -35,3 +35,15 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Local Spring Boot Config ###
+application-local.yml
+application-local.yaml
+application-local.properties
+application-*-local.yml
+application-*-local.yaml
+application-*-local.properties
+
+### Logs ###
+*.log
+logs/
