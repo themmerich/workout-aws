@@ -23,6 +23,8 @@ Alle Commands aus dem `frontend/`-Verzeichnis:
 - RxJS ~7.8
 - TypeScript ~5.9
 - Vitest ^4.0 (kein Jest, kein Karma/Jasmine)
+- PrimeNG 21 mit `@primeuix/themes` (Aura-Preset, Dark-Mode via `.dark-mode`)
+- NgRx SignalStore (`@ngrx/signals`) für globalen/Feature-State — lokaler State bleibt bei `signal()`/`computed()` in der Komponente
 
 ## Angular-Konventionen (21+)
 
