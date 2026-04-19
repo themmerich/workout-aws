@@ -1,0 +1,48 @@
+# === OS ===
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# === IDEs / Editors ===
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# === Environment / Secrets ===
+.env
+.env.local
+.env.*.local
+*.local.env
+
+# === Logs ===
+*.log
+logs/
+
+# === AWS / Infrastructure (für später) ===
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+.terraform.lock.hcl
+cdk.out/
+.aws-sam/
+
+# === Docker (für später) ===
+/pgdata/
+/postgres-data/
+docker-compose.override.yml
