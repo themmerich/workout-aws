@@ -1,0 +1,28 @@
+# Default: auto-detect text files, store + check out with LF line endings
+# This neutralizes platform autocrlf settings and keeps line endings consistent
+* text=auto eol=lf
+
+# Windows shell scripts keep CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary files (no line-ending conversion or diff)
+*.jar binary
+*.war binary
+*.ear binary
+*.zip binary
+*.gz binary
+*.tar binary
+*.7z binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg text
+*.pdf binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.otf binary
