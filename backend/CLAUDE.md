@@ -17,25 +17,35 @@ Der Gradle-Wrapper ist committed (`gradlew`, `gradlew.bat`, `gradle/wrapper/*`).
 
 ## Tech-Stack
 
-- Spring Boot 4.0.5: Web MVC, Security, Data JPA, Actuator
+- Spring Boot 4.0.5: Web MVC, Security, Data JPA, Validation, Actuator
 - PostgreSQL-Treiber + Flyway für Migrationen
 - Lombok (compile-only)
 - JUnit 5 (Spring Boot Starter Test)
 
-## Konfiguration & Profile
+## Konfiguration
 
-- `src/main/resources/application.yml` — committete Default-Konfiguration (noch nicht vorhanden, muss angelegt werden).
-- `src/main/resources/application-local.yml` — lokale Overrides (DB-Credentials, Dev-Secrets). **Git-ignored**, nie committen.
-- Lokal starten mit Profil `local`: `SPRING_PROFILES_ACTIVE=local ./gradlew bootRun`.
+- `src/main/resources/application.properties` — committete Default-Konfiguration. Datasource, JPA, Flyway, Actuator-Exposure und CORS-Allowed-Origins sind dort gepflegt.
+- **Aktueller Ansatz**: Env-Var-Fallbacks im Property-File, z. B. `spring.datasource.url=jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5433}/${POSTGRES_DB:workout}`. Für lokale Abweichungen reichen gesetzte Env-Vars — **kein** Spring-Profile `local`, **keine** separate `application-local.properties`-Datei im Einsatz.
+- Falls später ein Profile-Overlay gebraucht wird: Der Gitignore blockiert bereits `application-local.*`, der Property-Resolver-Order von Spring Boot greift dann automatisch. Kein Setup-Aufwand nötig, nur Datei anlegen und mit `--spring.profiles.active=local` starten.
+
+## Lokale Datenbank
+
+- **Docker-Compose** (im Repo-Root) startet `postgres:17-alpine` auf **Host-Port 5433** (nicht 5432 — s. Ports-Hinweis in der Root-`CLAUDE.md`).
+- Default-Credentials (nur für lokale Entwicklung): DB `workout`, User `workout`, Passwort `workout`.
+- Start: `docker compose up -d postgres`. Healthcheck via `pg_isready`.
 
 ## Konventionen
 
-- **Flyway-Migrationen** unter `src/main/resources/db/migration/`, Dateischema `V{version}__{snake_description}.sql` (z. B. `V1__create_workout_table.sql`).
-- **Package-Layout**: `de.workout.{domain}` (z. B. `de.workout.workout`, `de.workout.user`) — Feature-basiert, nicht Layer-basiert.
-- **Lombok**: `@Data`, `@Builder`, `@RequiredArgsConstructor` wo sinnvoll. Test-Code ohne Lombok, um Verhalten explizit zu halten.
-- **DTOs** als Java `record` bevorzugt.
-- **Spring Security**: Konfiguration per `SecurityFilterChain`-Bean, kein `WebSecurityConfigurerAdapter` (deprecated).
-- **JPA-Entities** liegen im jeweiligen Feature-Package. Repositories als Spring-Data-Interfaces.
+- **Package-Layout**: `de.workout.{domain}` (z. B. `de.workout.equipment`, `de.workout.user`) — Feature-basiert, nicht Layer-basiert. Cross-cutting Konfiguration (Security, Loader, CORS) unter `de.workout.config`. Als Vorbild dient das bestehende Feature `de.workout.equipment` (Entity, Repository, DTO, Controller im selben Package).
+- **REST-URL-Prefix**: Jeder Controller mountet unter `/api/<feature>` via `@RequestMapping("/api/<feature>")`. Controller-Methoden geben **DTOs** zurück, niemals Entities direkt.
+- **DTOs** als Java `record` mit statischer `from(Entity)`-Factory — siehe `EquipmentDto`.
+- **JPA-Entities** liegen im jeweiligen Feature-Package. Repositories als Spring-Data-Interfaces (`JpaRepository<T, ID>`).
+- **Primary Keys**: UUID via `@GeneratedValue(strategy = GenerationType.UUID)`; Java generiert die UUID vor dem Insert, kein DB-Default nötig.
+- **Lombok** auf Entities: `@Data`, `@NoArgsConstructor` (JPA-Pflicht), `@AllArgsConstructor`, `@Builder`. Auf Services/Controllern: `@RequiredArgsConstructor` für Constructor-Injection. Test-Code ohne Lombok, um Verhalten explizit zu halten.
+- **Enum-Mapping (Wire-Format)**: Enums sind UPPERCASE in Java und DB (`@Enumerated(EnumType.STRING)`), lowercase auf dem Wire. Umsetzung per `@JsonValue` (`name().toLowerCase(Locale.ROOT)`) und `@JsonCreator` (`valueOf(value.toUpperCase(Locale.ROOT))`). Referenz: `EquipmentCategory`. DB-Check-Constraints spiegeln die UPPERCASE-Werte.
+- **Flyway-Migrationen** unter `src/main/resources/db/migration/`, Dateischema `V{version}__{snake_description}.sql` (z. B. `V1__create_equipment.sql`). Schema-Create und Seed-Daten in **separaten** Migrationen (`V1__…`, `V2__…`).
+- **Spring Security**: Konfiguration per `SecurityFilterChain`-Bean in `de.workout.config.SecurityConfig`, kein `WebSecurityConfigurerAdapter` (deprecated). Aktueller Stand: `anyRequest().permitAll()`, CSRF aus, stateless Sessions, CORS aktiv.
+- **CORS**: `CorsConfigurationSource`-Bean in `SecurityConfig`, Allowed-Origins über Property `app.cors.allowed-origins` (komma-separierte Liste). Default in `application.properties`: `http://localhost:4200`.
 
 ## Testing
 

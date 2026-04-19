@@ -88,6 +88,12 @@ Sheriff läuft im **Barrel-less-Modus**: kein `index.ts` je Ordner nötig. Wenn 
 - **Enum-/Kategorie-Anzeige**: Rohwert bleibt in den Daten (`category: 'dumbbell'`), Anzeige via `{{ 'scope.enumName.' + value | transloco }}`.
 - Jedes neue Feature muss Keys in **beide** JSON-Files (`de.json`, `en.json`) einpflegen — sonst greift der `fallbackLang`.
 
+## Dev-Proxy (Backend-Anbindung)
+
+- Der Angular-Dev-Server leitet `/api/*`-Requests auf `http://localhost:8080` um. Konfiguration: `frontend/proxy.conf.json`, eingehängt in `angular.json` unter `projects.frontend.architect.serve.options.proxyConfig`.
+- HTTP-Aufrufe im Code nutzen **relative** Pfade, z. B. `http.get<Equipment[]>('/api/equipment')`. Dadurch funktioniert derselbe Code im Dev (via Vite-Proxy) und in Prod (via Reverse-Proxy / gleicher Origin), ohne dass CORS pro Umgebung anders laufen muss.
+- Ändert sich der Backend-Port, nur `proxy.conf.json` anpassen — Code bleibt wie er ist.
+
 ## Environments & Secrets
 
 - `.env`, `.env.local`, `.env.*.local` sind git-ignored.
