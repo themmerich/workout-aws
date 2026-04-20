@@ -1,0 +1,7 @@
+<ng-container *transloco="let t">
+  <section class="not-found">
+    <h1>{{ t('notFound.title') }}</h1>
+    <p>{{ t('notFound.message') }}</p>
+    <p-button [routerLink]="['/location/equipment']" [label]="t('notFound.backLink')" />
+  </section>
+</ng-container>

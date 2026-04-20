@@ -7,4 +7,8 @@ export const routes: Routes = [
       import('./domains/location/api/location.routes').then((m) => m.LOCATION_ROUTES),
   },
   { path: '', pathMatch: 'full', redirectTo: 'location/equipment' },
+  {
+    path: '**',
+    loadComponent: () => import('./shared/not-found/not-found-page').then((m) => m.NotFoundPage),
+  },
 ];

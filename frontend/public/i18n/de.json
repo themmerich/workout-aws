@@ -23,6 +23,13 @@
       "bodyweight": "Eigengewicht",
       "other": "Sonstiges"
     },
-    "emptyMessage": "Keine Einträge gefunden."
+    "emptyMessage": "Keine Einträge gefunden.",
+    "loading": "Equipment wird geladen…",
+    "loadingError": "Equipment konnte nicht geladen werden."
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "message": "Die aufgerufene Seite existiert nicht.",
+    "backLink": "Zurück zur Equipment-Übersicht"
   }
 }

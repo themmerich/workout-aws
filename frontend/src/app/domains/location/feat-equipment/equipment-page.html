@@ -1,74 +1,82 @@
 <ng-container *transloco="let t">
-  <p-toolbar>
-    <ng-template pTemplate="start">
-      <p-multiSelect
-        [options]="allColumns"
-        [ngModel]="visibleColumns()"
-        (ngModelChange)="visibleColumns.set($event)"
-        optionLabel="labelKey"
-        [placeholder]="t('equipment.toolbar.columnToggler')"
-        [selectedItemsLabel]="t('equipment.toolbar.selectedItemsLabel')"
-        [showHeader]="false"
-      >
-        <ng-template let-col pTemplate="item">
-          {{ col.labelKey | transloco }}
-        </ng-template>
-      </p-multiSelect>
-    </ng-template>
-    <ng-template pTemplate="center">
-      <p-iconField iconPosition="left">
-        <p-inputIcon><i class="pi pi-search"></i></p-inputIcon>
-        <input
-          type="text"
-          pInputText
-          (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-          [placeholder]="t('equipment.toolbar.search')"
-        />
-      </p-iconField>
-    </ng-template>
-  </p-toolbar>
+  @if (equipmentsResource.isLoading()) {
+    <div class="status-indicator">
+      <p-progressSpinner strokeWidth="4" />
+      <span>{{ t('equipment.loading') }}</span>
+    </div>
+  } @else if (equipmentsResource.error()) {
+    <p-message severity="error" [text]="t('equipment.loadingError')" />
+  } @else {
+    <p-toolbar>
+      <ng-template pTemplate="start">
+        <p-multiSelect
+          [options]="allColumns"
+          [ngModel]="visibleColumns()"
+          (ngModelChange)="visibleColumns.set($event)"
+          optionLabel="labelKey"
+          [placeholder]="t('equipment.toolbar.columnToggler')"
+          [selectedItemsLabel]="t('equipment.toolbar.selectedItemsLabel')"
+          [showHeader]="false"
+        >
+          <ng-template let-col pTemplate="item">
+            {{ col.labelKey | transloco }}
+          </ng-template>
+        </p-multiSelect>
+      </ng-template>
+      <ng-template pTemplate="center">
+        <p-iconField iconPosition="left">
+          <p-inputIcon><i class="pi pi-search"></i></p-inputIcon>
+          <input
+            type="text"
+            pInputText
+            (input)="onSearch($event)"
+            [placeholder]="t('equipment.toolbar.search')"
+          />
+        </p-iconField>
+      </ng-template>
+    </p-toolbar>
 
-  <p-table
-    #dt
-    [value]="equipments()"
-    [columns]="visibleColumns()"
-    dataKey="id"
-    [globalFilterFields]="['id', 'name', 'category']"
-    [scrollable]="true"
-    styleClass="p-datatable-sm"
-  >
-    <ng-template pTemplate="header" let-columns>
-      <tr>
-        @for (col of columns; track col.field) {
-          <th [pSortableColumn]="col.field">
-            <div class="column-header">
-              {{ col.labelKey | transloco }}
-              <p-sortIcon [field]="col.field" />
-              <p-columnFilter [field]="col.field" type="text" display="menu" />
-            </div>
-          </th>
-        }
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-row let-columns="columns">
-      <tr>
-        @for (col of columns; track col.field) {
-          <td>
-            @if (col.field === 'category') {
-              {{ 'equipment.categories.' + row.category | transloco }}
-            } @else {
-              {{ row[col.field] }}
-            }
+    <p-table
+      [value]="equipmentsResource.value()"
+      [columns]="visibleColumns()"
+      dataKey="id"
+      [globalFilterFields]="['id', 'name', 'category']"
+      [scrollable]="true"
+      styleClass="p-datatable-sm"
+    >
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          @for (col of columns; track col.field) {
+            <th [pSortableColumn]="col.field">
+              <div class="column-header">
+                {{ col.labelKey | transloco }}
+                <p-sortIcon [field]="col.field" />
+                <p-columnFilter [field]="col.field" type="text" display="menu" />
+              </div>
+            </th>
+          }
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row let-columns="columns">
+        <tr>
+          @for (col of columns; track col.field) {
+            <td>
+              @if (col.field === 'category') {
+                {{ 'equipment.categories.' + row.category | transloco }}
+              } @else {
+                {{ row[col.field] }}
+              }
+            </td>
+          }
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td [attr.colspan]="visibleColumns().length">
+            {{ 'equipment.emptyMessage' | transloco }}
           </td>
-        }
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="emptymessage">
-      <tr>
-        <td [attr.colspan]="visibleColumns().length">
-          {{ 'equipment.emptyMessage' | transloco }}
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
+        </tr>
+      </ng-template>
+    </p-table>
+  }
 </ng-container>
