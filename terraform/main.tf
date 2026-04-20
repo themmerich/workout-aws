@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 1.6"
+  required_version = ">= 1.10"
 
   required_providers {
     aws = {
@@ -9,9 +9,10 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "workout-aws-202533533588-terraform-state"
-    key    = "prod/terraform.tfstate"
-    region = "eu-central-1"
+    bucket       = "workout-aws-202533533588-terraform-state"
+    key          = "prod/terraform.tfstate"
+    region       = "eu-central-1"
+    use_lockfile = true
   }
 }
 
@@ -20,7 +21,7 @@ provider "aws" {
 }
 
 module "networking" {
-  source = "./modules/networking"
+  source       = "./modules/networking"
   project_name = var.project_name
 }
 
@@ -44,5 +45,5 @@ module "backend" {
 module "frontend" {
   source       = "./modules/frontend"
   project_name = var.project_name
-  api_url      = module.backend.alb_dns_name
+  api_url      = module.backend.api_url
 }
