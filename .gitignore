@@ -47,3 +47,10 @@ cdk.out/
 /pgdata/
 /postgres-data/
 docker-compose.override.yml
+
+# Terraform
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.backup
+terraform/terraform.tfvars
+terraform/.terraform.lock.hcl
