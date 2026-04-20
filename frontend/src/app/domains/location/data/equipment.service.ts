@@ -1,16 +1,14 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, Signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { httpResource, HttpResourceRef } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Equipment } from '../model/equipment.model';
 
 @Injectable({ providedIn: 'root' })
 export class EquipmentService {
-  private readonly http = inject(HttpClient);
-  private readonly equipments = toSignal(this.http.get<Equipment[]>('/api/equipment'), {
-    initialValue: [] as Equipment[],
+  private readonly equipments = httpResource<Equipment[]>(() => '/api/equipment', {
+    defaultValue: [],
   });
 
-  getAll(): Signal<Equipment[]> {
+  getAll(): HttpResourceRef<Equipment[]> {
     return this.equipments;
   }
 }

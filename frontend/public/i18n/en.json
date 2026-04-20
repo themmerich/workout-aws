@@ -23,6 +23,13 @@
       "bodyweight": "Bodyweight",
       "other": "Other"
     },
-    "emptyMessage": "No entries found."
+    "emptyMessage": "No entries found.",
+    "loading": "Loading equipment…",
+    "loadingError": "Could not load equipment."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "message": "The page you requested does not exist.",
+    "backLink": "Back to equipment overview"
   }
 }
