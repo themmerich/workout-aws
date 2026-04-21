@@ -45,7 +45,7 @@ jobs:
         run: npx sheriff verify src/main.ts
 
       - name: Tests
-        run: npx vitest run
+        run: npm run test:ci
 
       - name: Build
         run: npm run build
