@@ -160,6 +160,24 @@ resource "aws_vpc_security_group_egress_rule" "ecs_to_rds" {
   description                  = "PostgreSQL to RDS"
 }
 
+resource "aws_vpc_security_group_egress_rule" "ecs_dns_udp" {
+  security_group_id = aws_security_group.ecs.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "udp"
+  from_port         = 53
+  to_port           = 53
+  description       = "DNS (VPC-Resolver, ECR/RDS-Hostnames)"
+}
+
+resource "aws_vpc_security_group_egress_rule" "ecs_dns_tcp" {
+  security_group_id = aws_security_group.ecs.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "tcp"
+  from_port         = 53
+  to_port           = 53
+  description       = "DNS TCP fallback (große Antworten)"
+}
+
 # Security Group für RDS (PostgreSQL)
 # Nur von ECS erreichbar
 resource "aws_security_group" "rds" {
@@ -171,13 +189,6 @@ resource "aws_security_group" "rds" {
     to_port         = 5432
     protocol        = "tcp"
     security_groups = [aws_security_group.ecs.id]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {

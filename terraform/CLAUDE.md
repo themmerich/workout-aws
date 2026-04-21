@@ -8,7 +8,7 @@ AWS-Infrastruktur für workout-aws. Terraform ≥ 1.10, AWS Provider `~> 6.0`, R
 - `variables.tf`, `outputs.tf` — Root-Ein-/Ausgänge.
 - `terraform.tfvars.example` — Vorlage. Die echte `terraform.tfvars` ist gitignored; dort landet mindestens `db_password`.
 - `modules/`:
-  - `networking/` — VPC 10.0.0.0/16 über 2 AZs, Public Subnets (ALB + ECS) und Private Subnets (RDS), 3 Security Groups, neutralisierte Default-SG. **Kein NAT Gateway**: ECS läuft im Public Subnet mit `map_public_ip_on_launch` — spart ~30 €/Monat, kostet ~3 €/Task IPv4-Gebühr.
+  - `networking/` — VPC 10.0.0.0/16 über 2 AZs, Public Subnets (ALB + ECS) und Private Subnets (RDS), 3 Security Groups, neutralisierte Default-SG. ECS-SG-Egress explizit gepflegt (HTTPS, RDS, DNS/UDP+TCP); RDS-SG ohne Egress. **Kein NAT Gateway**: ECS läuft im Public Subnet mit `map_public_ip_on_launch` — spart ~30 €/Monat, kostet ~3 €/Task IPv4-Gebühr.
   - `database/` — RDS PostgreSQL 16 auf `db.t3.micro`, gp3 20–100 GiB, `storage_encrypted = true`, Private Subnets. `db_name` via `replace("-", "_")` (RDS erlaubt keine Bindestriche).
   - `backend/` — ECR + Lifecycle, CloudWatch Logs, ECS Fargate (Cluster/Task/Service, `desired_count = 1`, `assign_public_ip = true`), ALB + Target Group (`deregistration_delay = 30`) + HTTP-Listener, `deployment_circuit_breaker { rollback = true }`.
   - `frontend/` — S3-Bucket (global-unique via Account-ID-Suffix), CloudFront mit Origin Access Control, zwei Origins: S3 für Assets und ALB für `/api/*` (Managed Cache Policies, `CachingDisabled` + `AllViewerExceptHostHeader`). Angular trifft `/api/*` same-origin — kein CORS nötig.
