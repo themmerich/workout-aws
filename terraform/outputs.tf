@@ -10,7 +10,7 @@ output "frontend_url" {
   value = module.frontend.cloudfront_domain
 }
 
-output "db_url" {
-  value     = module.database.db_url
+output "db_endpoint" {
+  value     = module.database.db_endpoint
   sensitive = true
 }

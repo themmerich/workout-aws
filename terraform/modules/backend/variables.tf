@@ -10,7 +10,7 @@ variable "public_subnet_ids" {
   type = list(string)
 }
 
-variable "db_url" {
+variable "db_endpoint" {
   type      = string
   sensitive = true
 }
