@@ -15,6 +15,15 @@ Alle Commands aus dem `backend/`-Verzeichnis:
 
 Der Gradle-Wrapper ist committed (`gradlew`, `gradlew.bat`, `gradle/wrapper/*`). Kein lokales Gradle-Install nötig.
 
+## Docker-Build
+
+Multi-Stage-`Dockerfile` im Backend-Root:
+
+- Build-Stage: `eclipse-temurin:25-jdk`, `./gradlew bootJar -x test` (Tests laufen separat im CI, nicht im Image-Build).
+- Runtime-Stage: `eclipse-temurin:25-jre` + `curl` (ECS-Container-Healthcheck ruft `curl -f http://localhost:8080/api/actuator/health`).
+
+Lokal: `docker build -t workout-backend backend/` aus dem Repo-Root.
+
 ## Tech-Stack
 
 - Spring Boot 4.0.5: Web MVC, Security, Data JPA, Validation, Actuator

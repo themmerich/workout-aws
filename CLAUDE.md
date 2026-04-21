@@ -7,6 +7,7 @@ Monorepo für eine Workout-Tracking-Anwendung. Spring Boot Backend, Angular Fron
 - `backend/` — Spring Boot 4.0.5 (Java 25, Gradle Kotlin DSL). Details siehe `backend/CLAUDE.md`.
 - `frontend/` — Angular 21.2 (TypeScript, Vitest, SCSS). Details siehe `frontend/CLAUDE.md`.
 - `terraform/` — AWS-Infrastruktur (VPC, RDS, ECS Fargate, S3+CloudFront), Provider `~> 6.0`, Region `eu-central-1`. Details siehe `terraform/CLAUDE.md`.
+- `.github/workflows/` — CI/CD. Zwei getrennte Deploy-Workflows (`deploy-backend.yml`, `deploy-frontend.yml`), getriggert auf Push-to-`main` mit Path-Filter. Auth gegen AWS via OIDC (Role-ARN in Repo-Variable `AWS_ROLE_ARN`). Kein `terraform apply` aus CI.
 
 ## Git-Workflow
 
