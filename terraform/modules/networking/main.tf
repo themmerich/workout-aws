@@ -175,7 +175,7 @@ resource "aws_vpc_security_group_egress_rule" "ecs_dns_tcp" {
   ip_protocol       = "tcp"
   from_port         = 53
   to_port           = 53
-  description       = "DNS TCP fallback (große Antworten)"
+  description       = "DNS TCP fallback (large responses)"
 }
 
 # Security Group für RDS (PostgreSQL)
