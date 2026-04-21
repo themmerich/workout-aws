@@ -17,3 +17,9 @@ variable "db_password" {
   type      = string
   sensitive = true
 }
+
+variable "github_repository" {
+  type        = string
+  default     = "themmerich/workout-aws"
+  description = "GitHub-Repo (owner/name) für OIDC-Trust"
+}

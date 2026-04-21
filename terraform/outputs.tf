@@ -21,3 +21,8 @@ output "ecr_repository_url" {
   description = "ECR Repository URL für Docker Push"
 }
 
+output "ci_deploy_role_arn" {
+  value       = module.ci.deploy_role_arn
+  description = "ARN der IAM-Role für GitHub Actions OIDC (role-to-assume)"
+}
+

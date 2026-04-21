@@ -60,3 +60,15 @@ module "frontend" {
   project_name = var.project_name
   api_host     = module.backend.alb_dns_name
 }
+
+module "ci" {
+  source                      = "./modules/ci"
+  project_name                = var.project_name
+  github_repository           = var.github_repository
+  ecr_repository_arn          = module.backend.ecr_repository_arn
+  ecs_cluster_arn             = module.backend.ecs_cluster_arn
+  ecs_service_arn             = module.backend.ecs_service_arn
+  ecs_task_execution_role_arn = module.backend.ecs_task_execution_role_arn
+  frontend_bucket_arn         = module.frontend.s3_bucket_arn
+  cloudfront_distribution_arn = module.frontend.cloudfront_distribution_arn
+}
