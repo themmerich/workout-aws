@@ -58,5 +58,5 @@ module "backend" {
 module "frontend" {
   source       = "./modules/frontend"
   project_name = var.project_name
-  api_url      = module.backend.api_url
+  api_host     = module.backend.alb_dns_name
 }
