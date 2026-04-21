@@ -7,10 +7,17 @@ output "backend_api_url" {
 }
 
 output "frontend_url" {
-  value = module.frontend.cloudfront_domain
+  value       = module.frontend.cloudfront_domain
+  description = "URL deiner Angular App"
 }
 
 output "db_endpoint" {
   value     = module.database.db_endpoint
   sensitive = true
 }
+
+output "ecr_repository_url" {
+  value       = module.backend.ecr_repository_url
+  description = "ECR Repository URL für Docker Push"
+}
+
