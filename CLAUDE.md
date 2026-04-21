@@ -1,11 +1,12 @@
 # workout-aws
 
-Monorepo für eine Workout-Tracking-Anwendung. Spring Boot Backend, Angular Frontend, PostgreSQL als Datenbank, Deployment-Ziel AWS.
+Monorepo für eine Workout-Tracking-Anwendung. Spring Boot Backend, Angular Frontend, PostgreSQL als Datenbank, AWS-Deployment via Terraform.
 
 ## Repository-Struktur
 
 - `backend/` — Spring Boot 4.0.5 (Java 25, Gradle Kotlin DSL). Details siehe `backend/CLAUDE.md`.
 - `frontend/` — Angular 21.2 (TypeScript, Vitest, SCSS). Details siehe `frontend/CLAUDE.md`.
+- `terraform/` — AWS-Infrastruktur (VPC, RDS, ECS Fargate, S3+CloudFront), Provider `~> 6.0`, Region `eu-central-1`. Details siehe `terraform/CLAUDE.md`.
 
 ## Git-Workflow
 
@@ -50,4 +51,4 @@ Der Port-Offset auf 5433 ist Absicht — auf der Dev-Maschine läuft lokal ein n
 ## Offene Setup-Punkte
 
 - `.env.example` als committete Vorlage für lokale Overrides (noch nicht angelegt).
-- AWS-Infrastruktur (CDK oder Terraform, noch offen).
+- AWS-Deployment-Härtung (Secrets Manager, HTTPS, Custom Domain, CI-Checks) — Statusliste in `terraform/CLAUDE.md` unter *Offene Punkte / Follow-ups*.
