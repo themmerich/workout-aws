@@ -12,8 +12,8 @@ Alle Commands aus dem `frontend/`-Verzeichnis:
 - Dev-Server: `npm start` (entspricht `ng serve`, Default-Port 4200)
 - Build: `npm run build`
 - Watch-Build: `npm run watch`
-- Tests (Watch-Mode): `npm test` (Vitest)
-- Tests (Single-Run): `npx vitest run`
+- Tests (Watch-Mode): `npm test` (Vitest via Angulars `@angular/build:unit-test`-Builder)
+- Tests (Single-Run): `npm run test:ci` (gleicher Builder, `--watch=false`). **Nicht** `npx vitest run` — das umgeht den Angular-Test-Wrapper (Zone, TestBed-Init, Globals wie `describe`).
 - Lint: `npm run lint` (ESLint via `ng lint`, flat config in `eslint.config.js`)
 - Format schreiben: `npm run format` (Prettier über alle Dateien)
 - Format prüfen: `npm run format:check` (CI-Check)
