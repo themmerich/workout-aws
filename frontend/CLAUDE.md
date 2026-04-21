@@ -3,6 +3,8 @@
 Angular 21.2 Anwendung. TypeScript 5.9, SCSS als Style-Sprache, Vitest als Test-Framework.
 Paketmanager: `npm@11.6.2` (gepinnt über `packageManager` in `package.json`).
 
+`.npmrc` setzt `legacy-peer-deps=true`, weil `@softarc/eslint-plugin-sheriff` einen veralteten Peer-Dep-Range auf ESLint hat (`^8 || ^9`), das Projekt aber ESLint 10 nutzt. Ohne das flag schlägt `npm ci` in CI fehl.
+
 ## Commands
 
 Alle Commands aus dem `frontend/`-Verzeichnis:
