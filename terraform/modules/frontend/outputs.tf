@@ -9,3 +9,11 @@ output "s3_bucket_name" {
 output "cloudfront_distribution_id" {
   value = aws_cloudfront_distribution.main.id
 }
+
+output "s3_bucket_arn" {
+  value = aws_s3_bucket.main.arn
+}
+
+output "cloudfront_distribution_arn" {
+  value = aws_cloudfront_distribution.main.arn
+}

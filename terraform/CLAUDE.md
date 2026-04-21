@@ -12,6 +12,7 @@ AWS-Infrastruktur für workout-aws. Terraform ≥ 1.10, AWS Provider `~> 6.0`, R
   - `database/` — RDS PostgreSQL 16 auf `db.t3.micro`, gp3 20–100 GiB, `storage_encrypted = true`, Private Subnets. `db_name` via `replace("-", "_")` (RDS erlaubt keine Bindestriche).
   - `backend/` — ECR + Lifecycle, CloudWatch Logs, ECS Fargate (Cluster/Task/Service, `desired_count = 1`, `assign_public_ip = true`), ALB + Target Group (`deregistration_delay = 30`) + HTTP-Listener, `deployment_circuit_breaker { rollback = true }`.
   - `frontend/` — S3-Bucket (global-unique via Account-ID-Suffix), CloudFront mit Origin Access Control, zwei Origins: S3 für Assets und ALB für `/api/*` (Managed Cache Policies, `CachingDisabled` + `AllViewerExceptHostHeader`). Angular trifft `/api/*` same-origin — kein CORS nötig.
+  - `ci/` — GitHub-OIDC-Provider + Deploy-Role für GitHub Actions. Trust auf `repo:themmerich/workout-aws:ref:refs/heads/main`. Permissions: ECR-Push, ECS-Service-Update (+ PassRole für Execution-Role), S3-Frontend-Sync, CloudFront-Invalidation. Kein `terraform apply` aus CI.
 
 ## Commands
 
@@ -53,6 +54,7 @@ Folge-`init`s/`plan`s brauchen `-plugin-dir` nicht mehr — der Provider liegt d
 3. Angular bauen und in den Frontend-Bucket syncen: `cd frontend && npm run build && aws s3 sync dist/frontend/browser/ s3://<bucket>/ --delete`.
 4. Optional CloudFront-Cache invalidieren: `aws cloudfront create-invalidation --distribution-id <id> --paths '/*'`.
 5. ECS-Service pullt automatisch; Domain-Propagation dauert ~10 Min.
+6. `terraform output ci_deploy_role_arn` → ARN als GitHub-Actions-Variable `AWS_ROLE_ARN` im Repo hinterlegen (kein Secret nötig, die ARN ist nicht sensibel).
 
 ## Offene Punkte / Follow-ups
 
