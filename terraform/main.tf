@@ -42,12 +42,17 @@ module "database" {
 }
 
 module "backend" {
-  source            = "./modules/backend"
-  project_name      = var.project_name
-  vpc_id            = module.networking.vpc_id
-  public_subnet_ids = module.networking.public_subnet_ids
-  db_endpoint       = module.database.db_endpoint
-  db_password       = var.db_password
+  source                = "./modules/backend"
+  project_name          = var.project_name
+  aws_region            = var.aws_region
+  vpc_id                = module.networking.vpc_id
+  public_subnet_ids     = module.networking.public_subnet_ids
+  alb_security_group_id = module.networking.alb_security_group_id
+  ecs_security_group_id = module.networking.ecs_security_group_id
+  db_endpoint           = module.database.db_endpoint
+  db_name               = module.database.db_name
+  db_username           = var.db_username
+  db_password           = var.db_password
 }
 
 module "frontend" {
