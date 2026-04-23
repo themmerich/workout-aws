@@ -7,7 +7,7 @@ import Aura from '@primeuix/themes/aura';
 import { providePrimeNG } from 'primeng/config';
 
 import { routes } from './app.routes';
-import { TranslocoHttpLoader } from './core/transloco-http-loader';
+import { TranslocoHttpLoader } from './core/transloco/transloco-http-loader';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,7 +19,7 @@ export const appConfig: ApplicationConfig = {
       theme: {
         preset: Aura,
         options: {
-          darkModeSelector: '.dark-mode',
+          darkModeSelector: '.dark',
         },
       },
     }),

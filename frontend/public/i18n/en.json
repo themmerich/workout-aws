@@ -31,5 +31,20 @@
     "title": "Page not found",
     "message": "The page you requested does not exist.",
     "backLink": "Back to equipment overview"
+  },
+  "shell": {
+    "brand": "Workout",
+    "nav": {
+      "main": "Home",
+      "equipment": "Equipment",
+      "dashboard": "Dashboard"
+    },
+    "theme": {
+      "toLight": "Switch to light mode",
+      "toDark": "Switch to dark mode"
+    },
+    "language": {
+      "label": "Change language"
+    }
   }
 }
