@@ -107,9 +107,11 @@
           >
             <img
               src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/render/image/public/block.images/blocks/avatars/avatar-amyels.png"
+              alt=""
               class="w-8 h-8 rounded-full"
             />
-            <span class="flex-1 text-surface-900 dark:text-surface-0 text-base font-medium leading-tight"
+            <span
+              class="flex-1 text-surface-900 dark:text-surface-0 text-base font-medium leading-tight"
               >Amy Elsner</span
             >
             <i
@@ -147,7 +149,9 @@
               type="button"
               (click)="themeMode.toggle()"
               class="cursor-pointer text-surface-700 dark:text-surface-200 bg-transparent border-0 p-0 leading-none"
-              [attr.aria-label]="t(themeMode.isDark() ? 'shell.theme.toLight' : 'shell.theme.toDark')"
+              [attr.aria-label]="
+                t(themeMode.isDark() ? 'shell.theme.toLight' : 'shell.theme.toDark')
+              "
             >
               <i
                 [class]="themeMode.isDark() ? 'pi pi-sun' : 'pi pi-moon'"
@@ -159,6 +163,7 @@
             ></i>
             <img
               src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/render/image/public/block.images/blocks/avatars/avatar-amyels.png"
+              [alt]="t('shell.avatar.label')"
               class="w-8 h-8 rounded-full cursor-pointer"
             />
           </div>

@@ -45,6 +45,9 @@
     },
     "language": {
       "label": "Sprache wechseln"
+    },
+    "avatar": {
+      "label": "Benutzerprofil"
     }
   }
 }
