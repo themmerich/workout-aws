@@ -31,5 +31,20 @@
     "title": "Seite nicht gefunden",
     "message": "Die aufgerufene Seite existiert nicht.",
     "backLink": "Zurück zur Equipment-Übersicht"
+  },
+  "shell": {
+    "brand": "Workout",
+    "nav": {
+      "main": "Start",
+      "equipment": "Equipment",
+      "dashboard": "Dashboard"
+    },
+    "theme": {
+      "toLight": "Heller Modus",
+      "toDark": "Dunkler Modus"
+    },
+    "language": {
+      "label": "Sprache wechseln"
+    }
   }
 }
