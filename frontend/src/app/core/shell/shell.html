@@ -90,14 +90,18 @@
               </a>
             </li>
             <li>
-              <a
-                class="p-3 rounded-lg flex items-center gap-2 cursor-pointer text-surface-700 dark:text-surface-200 hover:text-surface-900 dark:hover:text-surface-0 hover:bg-white/80 dark:hover:bg-surface-950/50 transition-colors group"
+              <button
+                type="button"
+                (click)="logout()"
+                class="w-full p-3 rounded-lg flex items-center gap-2 cursor-pointer text-surface-700 dark:text-surface-200 hover:text-surface-900 dark:hover:text-surface-0 hover:bg-white/80 dark:hover:bg-surface-950/50 transition-colors group bg-transparent border-0 text-left"
               >
                 <i
                   class="pi pi-sign-out text-base! leading-tight! text-surface-700 dark:text-surface-200 group-hover:text-surface-900 dark:group-hover:text-surface-0"
                 ></i>
-                <span class="flex-1 text-base font-medium leading-tight">Sign Out</span>
-              </a>
+                <span class="flex-1 text-base font-medium leading-tight">{{
+                  t('shell.signOut')
+                }}</span>
+              </button>
             </li>
           </ul>
           <a
@@ -112,7 +116,7 @@
             />
             <span
               class="flex-1 text-surface-900 dark:text-surface-0 text-base font-medium leading-tight"
-              >Amy Elsner</span
+              >{{ auth.currentUser()?.username }}</span
             >
             <i
               class="pi pi-chevron-up text-base! leading-tight! text-surface-500 dark:text-surface-400 group-hover:text-surface-900 dark:group-hover:text-surface-0"

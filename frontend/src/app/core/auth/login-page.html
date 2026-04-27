@@ -1,0 +1,138 @@
+<ng-container *transloco="let t">
+  <div
+    class="px-6 py-20 md:px-20 lg:px-80 flex items-center justify-center min-h-screen bg-surface-50 dark:bg-surface-950"
+  >
+    <form
+      [formGroup]="form"
+      (ngSubmit)="submit()"
+      class="max-w-lg w-full flex flex-col items-start gap-8 bg-surface-0 dark:bg-surface-900 p-12 rounded-3xl shadow-[0px_24px_48px_0px_rgba(0,0,0,0.04)]"
+    >
+      <div class="flex flex-col items-center gap-6 w-full">
+        <div class="p-3 border border-surface-200 dark:border-surface-700 rounded-full">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            class="w-10 h-10 text-surface-700 dark:text-surface-200"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <rect x="2" y="8" width="2" height="8" rx="0.5" />
+            <rect x="5" y="6" width="3" height="12" rx="0.5" />
+            <rect x="8" y="11" width="8" height="2" />
+            <rect x="16" y="6" width="3" height="12" rx="0.5" />
+            <rect x="20" y="8" width="2" height="8" rx="0.5" />
+          </svg>
+        </div>
+        <h1
+          class="text-center text-2xl font-medium text-surface-900 dark:text-surface-0 leading-tight w-full"
+        >
+          {{ t('login.title') }}
+        </h1>
+      </div>
+
+      <div class="flex items-center gap-4 w-full">
+        <button
+          type="button"
+          pButton
+          [outlined]="true"
+          severity="secondary"
+          class="flex-1! py-2! text-surface-900! dark:text-surface-0!"
+        >
+          <i pButtonIcon class="pi pi-google text-base! leading-none!"></i>
+        </button>
+        <button
+          type="button"
+          pButton
+          [outlined]="true"
+          severity="secondary"
+          class="flex-1! py-2! text-surface-900! dark:text-surface-0!"
+        >
+          <i pButtonIcon class="pi pi-facebook text-base! leading-none!"></i>
+        </button>
+        <button
+          type="button"
+          pButton
+          [outlined]="true"
+          severity="secondary"
+          class="flex-1! py-2! text-surface-900! dark:text-surface-0!"
+        >
+          <i pButtonIcon class="pi pi-apple text-base! leading-none!"></i>
+        </button>
+      </div>
+
+      <div class="flex items-center gap-2 w-full">
+        <div class="h-px flex-1 bg-surface-200 dark:bg-surface-800"></div>
+        <div class="text-surface-700 dark:text-surface-300 font-bold">
+          {{ t('login.orDivider') }}
+        </div>
+        <div class="h-px flex-1 bg-surface-200 dark:bg-surface-800"></div>
+      </div>
+
+      <div class="flex flex-col gap-6 w-full">
+        <div class="flex flex-col gap-2">
+          <label for="email" class="text-surface-900 dark:text-surface-0 font-medium">
+            {{ t('login.email') }}
+          </label>
+          <input
+            pInputText
+            id="email"
+            type="email"
+            formControlName="username"
+            autocomplete="username"
+            [placeholder]="t('login.emailPlaceholder')"
+            class="p-3 shadow-sm dark:bg-surface-900!"
+          />
+        </div>
+        <div class="flex flex-col gap-2">
+          <label for="password" class="text-surface-900 dark:text-surface-0 font-medium">
+            {{ t('login.password') }}
+          </label>
+          <p-password
+            inputId="password"
+            formControlName="password"
+            autocomplete="current-password"
+            [placeholder]="t('login.passwordPlaceholder')"
+            inputStyleClass="w-full p-3 shadow-sm dark:bg-surface-900!"
+            [feedback]="false"
+            [toggleMask]="true"
+          />
+        </div>
+      </div>
+
+      <div
+        class="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-3 sm:gap-0"
+      >
+        <div class="flex items-center gap-2">
+          <p-checkbox inputId="rememberMe" formControlName="rememberMe" [binary]="true" />
+          <label for="rememberMe" class="text-surface-900 dark:text-surface-0 leading-normal">
+            {{ t('login.rememberMe') }}
+          </label>
+        </div>
+        <a
+          class="text-surface-500 dark:text-surface-400 font-medium cursor-pointer hover:text-surface-600 dark:hover:text-surface-300"
+        >
+          {{ t('login.forgotPassword') }}
+        </a>
+      </div>
+
+      <div class="flex flex-col gap-4 w-full">
+        @if (errorKey()) {
+          <div class="text-red-500 text-sm" role="alert">
+            {{ t(errorKey()!) }}
+          </div>
+        }
+        <button type="submit" pButton class="w-full" [disabled]="submitting() || form.invalid">
+          <span pButtonLabel>{{ t('login.signIn') }}</span>
+        </button>
+        <div class="text-center w-full">
+          <span class="text-surface-900 dark:text-surface-0 font-medium">
+            {{ t('login.noAccount') }}
+          </span>
+          <a class="text-primary font-medium cursor-pointer hover:text-primary-emphasis">
+            {{ t('login.createAccount') }}
+          </a>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-container>

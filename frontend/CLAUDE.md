@@ -36,7 +36,11 @@ Alle Commands aus dem `frontend/`-Verzeichnis:
 
 DDD-artige Aufteilung unter `src/app/`:
 
-- `core/` — App-weite, foundationale Dinge (z. B. HTTP-Interceptoren, Loader wie `transloco-http-loader.ts`).
+- `core/` — App-weite, foundationale Dinge. Aktuell:
+  - `auth/` — `AuthService` (signal-basiert), `authGuard` (functional `CanActivateFn`), `withCredentialsInterceptor`, `LoginPage`, `auth-model.ts`.
+  - `shell/` — Glassmorphic-Layout (Sidebar + Top-Bar), eingebunden als Route-geladene Parent-Komponente mit eigenem `<router-outlet />`.
+  - `theme/` — `ThemeModeService` (Dark/Light via `.dark`-Klasse am `<html>`, localStorage + `prefers-color-scheme`).
+  - `transloco/` — HTTP-Loader für i18n.
 - `shared/` — Cross-Cutting-Wiederverwendbares (UI-Bausteine, Pipes, Utils), für alle Domains zugänglich.
 - `domains/<domain>/` — fachlicher Schnitt, jede Domain (z. B. `location`) enthält:
   - `api/` — Routen-Konfigurationen (`*.routes.ts`), die per `loadComponent` / `loadChildren` Features lazy-laden.
@@ -89,6 +93,15 @@ Sheriff läuft im **Barrel-less-Modus**: kein `index.ts` je Ordner nötig. Wenn 
   `t(...)` für Attribute-Bindings, `| transloco`-Pipe für Displayed-Text — beide re-rendern automatisch bei Lang-Change.
 - **Enum-/Kategorie-Anzeige**: Rohwert bleibt in den Daten (`category: 'dumbbell'`), Anzeige via `{{ 'scope.enumName.' + value | transloco }}`.
 - Jedes neue Feature muss Keys in **beide** JSON-Files (`de.json`, `en.json`) einpflegen — sonst greift der `fallbackLang`.
+
+## Authentifizierung
+
+- **Mechanik**: Session-Cookie (Spring Security `IF_REQUIRED`). `withCredentialsInterceptor` in `core/auth/` klont jeden HTTP-Request mit `withCredentials: true`, damit der `JSESSIONID`-Cookie mitfliegt — lokal via Vite-Proxy same-origin, in Prod via CloudFront.
+- **Zustand**: `AuthService.currentUser` (Read-only-Signal) und `isAuthenticated` (Computed). `login()`/`logout()`/`me()` halten das Signal aktuell.
+- **App-Init**: `provideAppInitializer` in `app.config.ts` ruft `auth.me()` beim Bootstrap auf, damit eine bestehende Session nach Reload wiederhergestellt wird, bevor der Router den ersten Guard auswertet.
+- **Routing**: `/login` ist eine Geschwister-Route neben dem Shell-Layout. Alles unter `''` lädt die `Shell`-Komponente und hat `canActivate: [authGuard]` — unauthentifizierte User werden nach `/login` redirected. Shell rendert Kinder in ihrem internen `<router-outlet />`; App ist daher wieder nur `<router-outlet />`.
+- **Rollen**: `Role = 'admin' | 'user'`. Der Wert kommt als lowercase vom Backend (`@JsonValue` dort). **Noch kein Role-Guard** — sämtliche geschützten Routen prüfen nur „authentifiziert ja/nein".
+- **Logout**: im Shell-User-Menü wird `authService.logout()` getriggert, anschließend Navigation auf `/login`.
 
 ## Dev-Proxy (Backend-Anbindung)
 

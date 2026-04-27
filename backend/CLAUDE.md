@@ -53,8 +53,19 @@ Lokal: `docker build -t workout-backend backend/` aus dem Repo-Root.
 - **Lombok** auf Entities: `@Data`, `@NoArgsConstructor` (JPA-Pflicht), `@AllArgsConstructor`, `@Builder`. Auf Services/Controllern: `@RequiredArgsConstructor` für Constructor-Injection. Test-Code ohne Lombok, um Verhalten explizit zu halten.
 - **Enum-Mapping (Wire-Format)**: Enums sind UPPERCASE in Java und DB (`@Enumerated(EnumType.STRING)`), lowercase auf dem Wire. Umsetzung per `@JsonValue` (`name().toLowerCase(Locale.ROOT)`) und `@JsonCreator` (`valueOf(value.toUpperCase(Locale.ROOT))`). Referenz: `EquipmentCategory`. DB-Check-Constraints spiegeln die UPPERCASE-Werte.
 - **Flyway-Migrationen** unter `src/main/resources/db/migration/`, Dateischema `V{version}__{snake_description}.sql` (z. B. `V1__create_equipment.sql`). Schema-Create und Seed-Daten in **separaten** Migrationen (`V1__…`, `V2__…`).
-- **Spring Security**: Konfiguration per `SecurityFilterChain`-Bean in `de.workout.config.SecurityConfig`, kein `WebSecurityConfigurerAdapter` (deprecated). Aktueller Stand: `anyRequest().permitAll()`, CSRF aus, stateless Sessions, CORS aktiv.
+- **Spring Security**: Konfiguration per `SecurityFilterChain`-Bean in `de.workout.config.SecurityConfig`, kein `WebSecurityConfigurerAdapter` (deprecated). Session-Policy: `IF_REQUIRED` (HttpOnly-Cookie `JSESSIONID`). Auth-Endpunkte (`/api/auth/**`) und `/actuator/**` sind `permitAll`, alles Weitere unter `/api/**` ist `authenticated`. CSRF bewusst aus (Same-Origin-Deploy über CloudFront, keine Form-POSTs) — bei öffentlichen mutierenden Endpunkten neu bewerten. `httpBasic`/`formLogin`/`logout` sind deaktiviert, der Flow läuft ausschließlich über den Custom-JSON-`AuthController`. Passwort-Hashing via `BCryptPasswordEncoder`, `AuthenticationManager` als Bean exposed.
 - **CORS**: `CorsConfigurationSource`-Bean in `SecurityConfig`, Allowed-Origins über Property `app.cors.allowed-origins` (komma-separierte Liste). Default in `application.properties`: `http://localhost:4200`.
+
+## Authentifizierung
+
+- **User-Modell** (`de.workout.user`): `User`-Entity (UUID, unique `username`, BCrypt-Hash, `Role`-Enum `ADMIN`/`USER`). `Role` serialisiert per `@JsonValue` lowercase (`"admin"`/`"user"`), konsistent zu `EquipmentCategory`. Tabelle: `users` (quotingsicher gesetzt).
+- **Seed**: `de.workout.auth.InitialUserSeeder` (`ApplicationRunner`). Legt beim ersten Start zwei Dev-User an, sobald die Tabelle leer ist — `admin@workout.local` / `admin1234` (ADMIN), `user@workout.local` / `user1234` (USER). Muss vor Prod-Deploy durch Env-gesteuertes Seeding oder manuelle User-Anlage ersetzt werden.
+- **Spring-Bridge**: `de.workout.auth.UserDetailsServiceImpl` mappt die Entity auf Springs `UserDetails` mit Authority `ROLE_<ROLE_NAME>`.
+- **Endpunkte** (`de.workout.auth.AuthController`, alle unter `/api/auth`):
+  - `POST /login` — Body `{username, password}`, Response 200 mit `{username, role}` und gesetztem `JSESSIONID`-Cookie (persistiert via `HttpSessionSecurityContextRepository.saveContext(...)` — seit Spring Security 6 nötig beim Custom-Login). 401 bei Bad-Credentials.
+  - `GET /me` — 200 mit `{username, role}` für eingeloggte Session, 401 wenn keine/Anonymous. Bewusst `permitAll` in der FilterChain, damit der 401 vom Controller kommt und der Frontend-`me()`-Call sauber mit „null" umgehen kann.
+  - `POST /logout` — invalidiert Session + `SecurityContextHolder`, 204.
+- **Rollen-Checks**: aktuell keine — Endpunkte sind nur `authenticated`, nicht per Rolle geschützt. `@PreAuthorize` oder eigener Role-Guard folgt, wenn echte Autorisierungs-Anforderungen entstehen.
 
 ## Testing
 

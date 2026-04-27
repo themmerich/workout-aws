@@ -48,6 +48,23 @@
     },
     "avatar": {
       "label": "Benutzerprofil"
+    },
+    "signOut": "Abmelden"
+  },
+  "login": {
+    "title": "Willkommen zurück",
+    "email": "E-Mail-Adresse",
+    "emailPlaceholder": "E-Mail-Adresse",
+    "password": "Passwort",
+    "passwordPlaceholder": "Passwort",
+    "rememberMe": "Eingeloggt bleiben",
+    "forgotPassword": "Passwort vergessen?",
+    "signIn": "Anmelden",
+    "noAccount": "Noch kein Konto? ",
+    "createAccount": "Jetzt registrieren!",
+    "orDivider": "oder",
+    "error": {
+      "invalid": "Falsche E-Mail oder falsches Passwort."
     }
   }
 }

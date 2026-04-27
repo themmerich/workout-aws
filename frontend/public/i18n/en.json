@@ -48,6 +48,23 @@
     },
     "avatar": {
       "label": "User profile"
+    },
+    "signOut": "Sign Out"
+  },
+  "login": {
+    "title": "Welcome Back",
+    "email": "Email Address",
+    "emailPlaceholder": "Email Address",
+    "password": "Password",
+    "passwordPlaceholder": "Password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot your password?",
+    "signIn": "Sign In",
+    "noAccount": "Don't have an account? ",
+    "createAccount": "Create today!",
+    "orDivider": "or",
+    "error": {
+      "invalid": "Invalid email or password."
     }
   }
 }
