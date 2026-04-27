@@ -56,6 +56,33 @@ Folge-`init`s/`plan`s brauchen `-plugin-dir` nicht mehr — der Provider liegt d
 5. ECS-Service pullt automatisch; Domain-Propagation dauert ~10 Min.
 6. `terraform output ci_deploy_role_arn` → ARN als GitHub-Actions-Variable `AWS_ROLE_ARN` im Repo hinterlegen (kein Secret nötig, die ARN ist nicht sensibel).
 
+## Tear-Down (AWS-Setup zurückbauen)
+
+Wenn AWS pausiert werden soll (Kosten sparen), so vorgehen — ist vollständig reversibel:
+
+1. **Auto-Deploy deaktivieren** (falls noch nicht erledigt): Der `push`-Trigger in `.github/workflows/deploy-backend.yml` und `deploy-frontend.yml` ist auskommentiert; `workflow_dispatch` bleibt für manuelle Re-Deploys.
+
+2. **Terraform-State auf den aktuellen Stand bringen**, falls die `force_destroy`/`force_delete`-Flags noch nicht im State sind:
+   ```bash
+   cd terraform
+   terraform apply
+   ```
+   `aws_s3_bucket.main` (Frontend-Bucket) trägt `force_destroy = true`, `aws_ecr_repository.main` trägt `force_delete = true`. Damit räumt destroy auch nicht-leere Buckets/Repos sauber ab.
+
+3. **Destroy:**
+   ```bash
+   terraform destroy
+   ```
+   Dauert ~10–20 Min wegen CloudFront-Disable + RDS-Termination. State-Bucket bleibt unangetastet (wird ja nicht von Terraform verwaltet).
+
+4. **Optional**: GitHub-Actions-Variables (`AWS_ROLE_ARN` etc.) im Repo löschen — nicht nötig, schaden aber auch nicht; der nächste Apply liefert sowieso neue Werte.
+
+5. **Wiederaufbau** später: einfach `terraform apply` aus dem `terraform/`-Verzeichnis. State-Bucket existiert noch, AWS-Credentials wie gewohnt im Terminal. Anschließend `terraform output` lesen, neue Werte in die GitHub-Actions-Variables eintragen, Backend-Image manuell oder per `workflow_dispatch` pushen.
+
+**Was destroy nicht entfernt:**
+- Den S3-State-Bucket (`workout-aws-202533533588-terraform-state`) — bewusst manuell verwaltet.
+- IAM-User/Roles, die du außerhalb von Terraform angelegt hast.
+
 ## Offene Punkte / Follow-ups
 
 ### Security (vor Prod-Rollout)

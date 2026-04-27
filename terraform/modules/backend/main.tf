@@ -1,7 +1,11 @@
 # ECR Repository für Docker Images
+# force_delete = true: terraform destroy entfernt das Repo auch dann, wenn noch
+# Images drin sind. Ohne das Flag muesste der Lifecycle alle Images expired haben
+# oder sie manuell geloescht werden, bevor destroy durchgeht.
 resource "aws_ecr_repository" "main" {
   name                 = var.project_name
   image_tag_mutability = "MUTABLE"
+  force_delete         = true
 
   image_scanning_configuration {
     scan_on_push = true

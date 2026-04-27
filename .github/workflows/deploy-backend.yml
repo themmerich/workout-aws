@@ -1,11 +1,13 @@
 name: Deploy Backend
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'backend/**'
-      - '.github/workflows/deploy-backend.yml'
+  # Auto-Deploy ist pausiert (Kostenoptimierung). Trigger nur manuell via Actions-UI.
+  # Wieder aktivieren: push-Block einkommentieren.
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - 'backend/**'
+  #     - '.github/workflows/deploy-backend.yml'
   workflow_dispatch:
 
 concurrency:
