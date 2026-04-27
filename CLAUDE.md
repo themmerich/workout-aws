@@ -37,7 +37,16 @@ cd backend && ./gradlew bootRun
 cd frontend && npm start
 ```
 
-Browser `http://localhost:4200/` → redirect auf `/location/equipment`.
+Browser `http://localhost:4200/` → Login-Screen (`authGuard` redirectet unauthentifizierte Requests). Nach Anmeldung landet man auf `/location/equipment`.
+
+**Dev-Seed-User** (vom Backend-`InitialUserSeeder` beim ersten Start angelegt, wenn die `users`-Tabelle leer ist):
+
+| Username | Passwort | Rolle |
+|---|---|---|
+| `admin@workout.local` | `admin1234` | ADMIN |
+| `user@workout.local` | `user1234` | USER |
+
+Bewusst Dev-Defaults — vor Prod-Deploy durch Env-gesteuerten Seeder oder manuelle User-Anlage ersetzen.
 
 **Port-Belegung:**
 
