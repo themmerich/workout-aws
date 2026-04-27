@@ -2,8 +2,12 @@
 data "aws_caller_identity" "current" {}
 
 # S3 Bucket für Angular Build-Artefakte
+# force_destroy = true: terraform destroy entfernt den Bucket auch dann, wenn
+# noch Build-Artefakte drinliegen. Ohne das Flag muesste der Bucket erst leer
+# gemacht werden (aws s3 rm s3://... --recursive), bevor destroy durchgeht.
 resource "aws_s3_bucket" "main" {
-  bucket = "${var.project_name}-frontend-${data.aws_caller_identity.current.account_id}"
+  bucket        = "${var.project_name}-frontend-${data.aws_caller_identity.current.account_id}"
+  force_destroy = true
 
   tags = {
     Name = "${var.project_name}-frontend"

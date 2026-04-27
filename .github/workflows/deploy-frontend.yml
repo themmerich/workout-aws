@@ -1,11 +1,13 @@
 name: Deploy Frontend
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'frontend/**'
-      - '.github/workflows/deploy-frontend.yml'
+  # Auto-Deploy ist pausiert (Kostenoptimierung). Trigger nur manuell via Actions-UI.
+  # Wieder aktivieren: push-Block einkommentieren.
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - 'frontend/**'
+  #     - '.github/workflows/deploy-frontend.yml'
   workflow_dispatch:
 
 concurrency:
